@@ -1,0 +1,87 @@
+body {
+    overflow: hidden;
+    margin : 0;
+}
+
+#backGround {
+    height : 980px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 100% 100%;
+}
+
+#clock {
+    padding-top: 300px;
+    font-size: 100px;
+    color: white;
+    text-align: center;
+}
+
+#name,
+#name2 {
+    text-align: center;
+    color: white;
+    font-size: 60px;
+}
+
+#name3,
+#name4,
+#todolist {
+    text-align: center;
+    color: white;
+    font-size: 40px;
+}
+
+#todolist::-webkit-scrollbar {
+    display: none;
+}
+
+#City {
+    color: white;
+}
+
+#Todo {
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+    color: white;
+    width: 400px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+}
+
+#Todo2 {
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+    color: white;
+    width: 400px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+}
+
+#btn {
+    background: transparent;
+    color: white;
+    border: 0px;
+    width: 50pt;
+    height: 30pt;
+    font-size: 30px;
+}
+
+#del {
+    background: transparent;
+    color: white;
+    border: 0px;
+    width: 75pt;
+    height: 30pt;
+    font-size: 30px;
+}
+
+ul {
+    list-style: none;
+}

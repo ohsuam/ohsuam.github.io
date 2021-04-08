@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <title>Weather</title>
+    <link rel="stylesheet" href="project1.css">
+
+<body>
+    <div id="backGround">
+        <div class="weather">
+            <img class="CurrIcon">
+            <div class="CurrTemp" style="color:white; font-size:30px;"></div>
+            <div class="City" style="color:white; font-size:20px;"></div>
+        </div>
+
+        <body onload="printClock()">
+            <div id="clock"></div>
+            <div id="name">
+                What is your name?
+            </div>
+            <div id="name2">
+                <input id="Todo" type="text" onkeyup="if(window.event.keyCode==13){start()}" />
+            </div>
+            <div id="name3"></div>
+            <div id="name4">
+                <input id="Todo2" type="text" placeholder="Write a to do" />
+                <input id="btn" type="button" value="ok" onclick="todo()">
+            </div>
+            <ul id="todolist" style="height : 30%;
+            overflow:scroll;
+            overflow-x: hidden;
+            -ms-overflow-style: none;">
+            </ul>
+        </body>
+    </div>
+
+
+
+
+
+
+
+    <!-- script -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
+
+    <script>
+        var names = document.getElementById("name3");
+
+        var currentDate = new Date(); // 현재시간
+        var currentHours = addZeros(currentDate.getHours(), 2);
+        var currentMinute = addZeros(currentDate.getMinutes(), 2);
+        var currentSeconds = addZeros(currentDate.getSeconds(), 2);
+        var amPm = 'AM';
+        var cnt = 0;
+        var list = document.getElementById("todolist");
+
+        // 첫실행
+        window.onload = function() {
+            //첫 시간 설정
+            if (currentHours >= 12) { // 시간이 12보다 클 때 PM으로 세팅, 12를 빼줌
+                amPm = 'PM';
+
+                if (currentHours >= 13) {
+                    currentHours = addZeros(currentHours - 12, 2);
+                }
+            }
+
+            clock.innerHTML = "<span style='font-size:100px;'>" + amPm + " </span>" + currentHours + ":" + currentMinute + ":" + currentSeconds; //날짜를 출력해 줌
+
+            setTimeout("printClock()", 1000); // 1초마다 printClock() 함수 호출
+
+
+
+            // 첫 화면 key값 비교
+            if (localStorage.name == undefined) {
+                $('#name').show();
+                $('#name2').hide();
+                $('#name3').hide();
+                $('#name4').hide();
+
+            } else if (localStorage.name != undefined) {
+                $('#name').hide();
+                $('#name2').hide();
+
+                if (amPm == "AM" && (currentHours >= 6 && currentHours < 12)) {
+                    names.innerHTML = "Good Morning, " + localStorage.name;
+                } else if (amPm == "PM" && (currentHours == 12 || currentHours < 6)) {
+                    names.innerHTML = "Good afternoon, " + localStorage.name;
+                } else if (amPm == "PM" && (currentHours >= 6 && currentHours < 12)) {
+                    names.innerHTML = "Good Evening, " + localStorage.name;
+                } else if (amPm == "AM" && (currentHours == 12 || currentHours < 6)) {
+                    names.innerHTML = "Good Evening, " + localStorage.name;
+                }
+
+                $("#name3").show();
+                $("#name4").show();
+            }
+            retodo();
+        }
+
+
+        // Todo 창 만들기
+        $(document).ready(function() {
+            $('#name').click(function() {
+                $('#name').hide();
+                $('#name2').show();
+            });
+        });
+
+
+
+        // name 누르고 text에 값을 입력한 후 엔터를 눌렀을 시에 나오는 이벤트
+        function start() {
+            if ($('#Todo').val() == '') {
+                alert("값을 넣어주세요.");
+            } else {
+                localStorage.name = ($('#Todo').val());
+
+                $('#name2').hide();
+                $('#name4').show();
+
+                if (currentHours >= 12) { // 0시간이 12보다 클 때 PM으로 세팅, 12를 빼줌
+                    amPm = 'PM';
+
+                    if (currentHours >= 13) {
+                        currentHours = addZeros(currentHours - 12, 2);
+                    }
+                }
+
+                if (amPm == "AM" && (currentHours >= 6 && currentHours < 12)) {
+                    names.innerHTML = "Good Morning, " + localStorage.name;
+                } else if (amPm == "PM" && (currentHours == 12 || currentHours < 6)) {
+                    names.innerHTML = "Good afternoon, " + localStorage.name;
+                } else if (amPm == "PM" && (currentHours >= 6 && currentHours < 12)) {
+                    names.innerHTML = "Good Evening, " + localStorage.name;
+                } else if (amPm == "AM" && (currentHours == 12 || currentHours < 6)) {
+                    names.innerHTML = "Good Evening, " + localStorage.name;
+                }
+
+                $('#name3').show();
+            }
+        }
+
+
+        //Todo 추가
+        function retodo() {
+            if (localStorage.todo != null) {
+                var output = localStorage.getItem("todo");
+                var arr = JSON.parse(output);
+            } else {
+                var arr = new Array();
+            }
+
+            if (arr != null) {
+                for (cnt = 0; cnt < arr.length; cnt++) {
+                    var temp = document.createElement('li');
+                    temp.setAttribute("id", "li" + cnt);
+                    temp.setAttribute("class", "todoli");
+                    temp.innerHTML = arr[cnt];
+                    temp.innerHTML += "<button onclick='remove(" + cnt + ")'id='del'> Cancel </button>";
+                    list.appendChild(temp);
+                    console.log(cnt);
+                }
+            }
+
+        }
+
+
+        //Todo 추가
+        function todo() {
+            if (localStorage.todo != null) {
+                var output = localStorage.getItem("todo");
+                var arr = JSON.parse(output);
+            } else {
+                var arr = new Array();
+            }
+
+            var todos = document.getElementById('Todo2').value;
+
+            if (todos != '') {
+                var temp = document.createElement('li');
+                temp.setAttribute("id", "li" + cnt);
+                temp.setAttribute("class", "todoli");
+                temp.innerHTML = todos;
+                temp.innerHTML += "<button onclick='remove(" + cnt + ")'id='del'> Cancel </button>";
+                list.appendChild(temp);
+                arr.push(todos);
+                localStorage.setItem("todo", JSON.stringify(arr));
+
+                cnt++;
+
+                document.getElementById("Todo2").value = null;
+
+            } else {
+                alert("값을 넣어주세요.");
+            }
+        }
+
+
+
+        //Todo 삭제
+        function remove(cnt) {
+            var output = localStorage.getItem("todo");
+            var arr = JSON.parse(output);
+            var li = document.getElementById('li' + cnt);
+            list.removeChild(li);
+            arr.splice(cnt, 1);
+            localStorage.setItem("todo", JSON.stringify(arr));
+
+            while (list.hasChildNodes()) {
+                list.removeChild(list.firstChild);
+            }
+
+            output = localStorage.getItem("todo");
+            arr = JSON.parse(output);
+            for (var i = 0; i < arr.length; i++) {
+                var temp = document.createElement('li');
+                temp.setAttribute("class", "todoli");
+                temp.setAttribute("id", "li" + i);
+                temp.innerHTML = arr[i];
+                temp.innerHTML += "<button onclick='remove(" + i + ")'id='del'> Cancel </button>";
+                list.appendChild(temp);
+                cnt = i;
+            }
+
+        }
+
+
+
+        // 날씨
+        $.ajax({
+            url: 'http://api.openweathermap.org/data/2.5/weather?q=Busan&appid=37148548febfde0fbefe0c727952ce31&units=metric',
+            dataType: 'json',
+            type: 'GET',
+            success: function(data) {
+                var imgURL = "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
+
+                $('.CurrIcon').attr("src", imgURL);
+                $('.CurrTemp').text(Math.floor(data.main.temp) + 'º');
+                $('.City').text(data.name);
+            }
+        })
+
+
+
+        // 배경 랜덤 스크립트
+        var bg = new Array();
+        bg[bg.length] = '배경1.jpg';
+        bg[bg.length] = '배경2.jpg';
+        bg[bg.length] = '배경3.jpg';
+        bg[bg.length] = '배경4.jpg';
+        bg[bg.length] = '배경5.jpg';
+
+        var obj = document.getElementById('backGround');
+        var size = Math.floor(Math.random() * (bg.length));
+        j = (isNaN(size)) ? 0 : size;
+        obj.style.backgroundImage = 'url(' + bg[size] + ')';
+
+
+
+        // 시간 스크립트
+        function printClock() {
+            var clock = document.getElementById("clock"); // 출력할 장소 선택
+            var amPm = 'AM'; // 초기값 AM
+            var currentDate = new Date(); // 현재시간
+            var currentHours = addZeros(currentDate.getHours(), 2);
+            var currentMinute = addZeros(currentDate.getMinutes(), 2);
+            var currentSeconds = addZeros(currentDate.getSeconds(), 2);
+
+            if (currentHours >= 12) { // 시간이 12보다 클 때 PM으로 세팅, 12를 빼줌
+                amPm = 'PM';
+
+                if (currentHours >= 13) {
+                    currentHours = addZeros(currentHours - 12, 2);
+                }
+            }
+
+            clock.innerHTML = "<span style='font-size:100px;'>" + amPm + " </span>" + currentHours + ":" + currentMinute + ":" + currentSeconds; //날짜를 출력해 줌
+
+            setTimeout("printClock()", 1000); // 1초마다 printClock() 함수 호출
+        }
+
+
+
+        // 자릿수 맞춰주기
+        function addZeros(num, digit) {
+            var zero = '';
+            num = num.toString();
+            if (num.length < digit) {
+                for (i = 0; i < digit - num.length; i++) {
+                    zero += '0';
+                }
+            }
+            return zero + num;
+        }
+    </script>
+
+</body>
+</head>
+
+</html>
