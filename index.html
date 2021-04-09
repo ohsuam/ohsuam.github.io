@@ -2,7 +2,7 @@
 <html lang="ko">
 
 <head>
-    <title>Weather</title>
+    <title>suamMomentum</title>
     <link rel="stylesheet" href="project1.css">
 
 <body>
@@ -19,11 +19,11 @@
                 What is your name?
             </div>
             <div id="name2">
-                <input id="Todo" type="text" onkeyup="if(window.event.keyCode==13){start()}" />
+                <input id="Todo" type="text" onkeydown="JavaScript:start();" />
             </div>
             <div id="name3"></div>
             <div id="name4">
-                <input id="Todo2" type="text" placeholder="Write a to do" />
+                <input id="Todo2" type="text" placeholder="Write a to do" onkeydown="if(window.event.keyCode==13){todo()}" />
                 <input id="btn" type="button" value="ok" onclick="todo()">
             </div>
             <ul id="todolist" style="height : 30%;
@@ -113,33 +113,36 @@
 
         // name 누르고 text에 값을 입력한 후 엔터를 눌렀을 시에 나오는 이벤트
         function start() {
-            if ($('#Todo').val() == '') {
-                alert("값을 넣어주세요.");
-            } else {
-                localStorage.name = ($('#Todo').val());
+            var name = document.getElementById('Todo').value;
+            if (event.keyCode == 13) {
+                if (name == "") {
+                    alert("값을 넣어주세요.");
+                } else {
+                    localStorage.name = name;
 
-                $('#name2').hide();
-                $('#name4').show();
+                    $('#name2').hide();
+                    $('#name4').show();
 
-                if (currentHours >= 12) { // 0시간이 12보다 클 때 PM으로 세팅, 12를 빼줌
-                    amPm = 'PM';
+                    if (currentHours >= 12) { // 0시간이 12보다 클 때 PM으로 세팅, 12를 빼줌
+                        amPm = 'PM';
 
-                    if (currentHours >= 13) {
-                        currentHours = addZeros(currentHours - 12, 2);
+                        if (currentHours >= 13) {
+                            currentHours = addZeros(currentHours - 12, 2);
+                        }
                     }
-                }
 
-                if (amPm == "AM" && (currentHours >= 6 && currentHours < 12)) {
-                    names.innerHTML = "Good Morning, " + localStorage.name;
-                } else if (amPm == "PM" && (currentHours == 12 || currentHours < 6)) {
-                    names.innerHTML = "Good afternoon, " + localStorage.name;
-                } else if (amPm == "PM" && (currentHours >= 6 && currentHours < 12)) {
-                    names.innerHTML = "Good Evening, " + localStorage.name;
-                } else if (amPm == "AM" && (currentHours == 12 || currentHours < 6)) {
-                    names.innerHTML = "Good Evening, " + localStorage.name;
-                }
+                    if (amPm == "AM" && (currentHours >= 6 && currentHours < 12)) {
+                        names.innerHTML = "Good Morning, " + localStorage.name;
+                    } else if (amPm == "PM" && (currentHours == 12 || currentHours < 6)) {
+                        names.innerHTML = "Good afternoon, " + localStorage.name;
+                    } else if (amPm == "PM" && (currentHours >= 6 && currentHours < 12)) {
+                        names.innerHTML = "Good Evening, " + localStorage.name;
+                    } else if (amPm == "AM" && (currentHours == 12 || currentHours < 6)) {
+                        names.innerHTML = "Good Evening, " + localStorage.name;
+                    }
 
-                $('#name3').show();
+                    $('#name3').show();
+                }
             }
         }
 
@@ -281,9 +284,9 @@
 
             setTimeout("printClock()", 1000); // 1초마다 printClock() 함수 호출
         }
-
-
-
+        
+        
+        
         // 자릿수 맞춰주기
         function addZeros(num, digit) {
             var zero = '';
